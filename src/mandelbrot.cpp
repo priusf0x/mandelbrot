@@ -15,9 +15,6 @@ ShowMandelbrot(visual_t visual,
 {
     assert(visual != nullptr);
 
-    Clock clock {};
-    double lastTime = 0.0f, currentTime = 0.0f, fps = 0.0f;
-
     while (visual->window->isOpen())
     {
         while (const optional event = visual->window->pollEvent())
@@ -28,12 +25,8 @@ ShowMandelbrot(visual_t visual,
         
         visual->window->clear();
 
-            //FIXME FIXME FIXME FIXME FIXME
-        currentTime = clock.getElapsedTime().asSeconds();
-        fps = 1.0f / (currentTime - lastTime);
-        lastTime = currentTime;
-        printf("%f\n", fps); // FIXME FIIIIIIX ITTTT TEMPROARY
-                             
+        ShowFPS(visual);
+
         CalculateMandelbrot(core);
 
         UpdateScreen(visual);

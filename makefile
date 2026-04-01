@@ -4,7 +4,8 @@ SOURCES= \
 		\
 		visuals/visuals.cpp\
 		\
-		core/core_default.cpp
+		core/simple_core.cpp
+		# core/core_avx.cpp
 
 INCLUDES_DIR = \
 	       visuals/\
@@ -22,7 +23,8 @@ TARGET = mandelbrot.out
 
 # c++/c compiler options
 CC = g++
-CFLAGS =  -D _DEBUG -ggdb3 -std=c++17 -O2 -Wall -Wextra -Weffc++ -Waggressive-loop-optimizations\
+CFLAGS =  -D _DEBUG -ggdb3 -std=c++17 -O3 -mavx -march=native
+CFLAGS += -Wall -Wextra -Weffc++ -Waggressive-loop-optimizations\
 		 -Wc++14-compat -Wmissing-declarations -Wcast-align -Wcast-qual -Wchar-subscripts\
 		 -Wconditionally-supported -Wconversion -Wctor-dtor-privacy -Wempty-body -Wfloat-equal\
 		 -Wformat-nonliteral -Wformat-security -Wformat-signedness -Wformat=2 -Winline -Wlogical-op\
@@ -39,6 +41,7 @@ CFLAGS =  -D _DEBUG -ggdb3 -std=c++17 -O2 -Wall -Wextra -Weffc++ -Waggressive-lo
                  -fsanitize=undefined,unreachable,vla-bound,vptr
 CFLAGS += $(INCLUDES)
 CFLAGS += -lsfml-graphics -lsfml-window -lsfml-system
+# CFLAGS += -fopt-info-vec-missed
 
 
 $(OBJ_DIR)/%.o: $(SOURCE_DIR)/%.cpp

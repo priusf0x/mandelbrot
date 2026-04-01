@@ -8,15 +8,14 @@ typedef uint8_t pixel_t;
 struct core_s
 {
     pixel_t* pixels;
-    double   resolution;
-    double   x_0;
-    double   y_0;
+    float    resolution;
 };
 typedef core_s* core_t;
 
 
 const size_t MAX_RUN_NUMBER = 255;
-const double MAX_DISTANCE = 100.0f;
+const float MAX_DISTANCE = 3.0f;
+const size_t PIX_LEN = 4;
 
 void 
 CalculateMandelbrot(core_t core);

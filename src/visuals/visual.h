@@ -5,6 +5,7 @@
 
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 #include "core.h"
 
@@ -20,6 +21,10 @@ struct visual_s
     pixel_t*      pixels;
     Texture*      texture;
     Sprite*       screen;
+    Clock*        clock;
+    double        pr_frame;
+    Text*         fps_counter;
+    const Font*   font;
 };
 typedef visual_s* visual_t;
 
@@ -39,5 +44,8 @@ VisualDtor(visual_t* context);
 
 visual_return_e 
 UpdateScreen(visual_t context);
+
+visual_return_e 
+ShowFPS(visual_t context);
 
 #endif // VISUAL_H
