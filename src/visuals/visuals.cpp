@@ -95,19 +95,30 @@ visual_return_e
 ShowFPS(visual_t context)
 {
     assert(context != nullptr);
+
+    const size_t frame_upd = 10;
+    context->window->draw(*context->fps_counter);
+
+    if (context->frame_counter < frame_upd)
+    {
+        context->frame_counter++;
+
+        return VISUAL_RETURN_SUCCESS;
+    }
+
+    context->frame_counter = 0;
     
     const size_t buffer_size = 256;
     static char buffer[buffer_size] = {};
 
     double cur_frame = (*context->clock).getElapsedTime().asSeconds();
-    double fps = 1.0f / (cur_frame - context->pr_frame);
+    double fps = 1.0f / (cur_frame - context->pr_frame) * frame_upd;
     context->pr_frame = cur_frame;
 
     const char* fps_format = "FPS: %.1f";
     snprintf(buffer, buffer_size, fps_format, fps);
 
     context->fps_counter->setString(buffer);
-    context->window->draw(*context->fps_counter);
 
     return VISUAL_RETURN_SUCCESS;
 }

@@ -8,7 +8,7 @@
 
 static const size_t CENTER_X = SIZE_X / 2;
 static const size_t CENTER_Y = SIZE_Y / 2;
-static const size_t FLOAT_CAPACITY = 8;
+static const size_t FLOAT_CAPACITY = 16;
 
 ///////////////////////////// inline functions ////////////////////////////////
 
@@ -44,7 +44,7 @@ inline __mm _mm_and(__mm a, __mm b) { __mm ret = {}; CYCLE { ret.vec_i[i] = a.ve
 inline __mm _mm_or(__mm a, __mm b) { __mm ret = {}; CYCLE { ret.vec_i[i] = a.vec_i[i] | b.vec_i[i]; } return ret; }; 
 inline __mm _mm_slli_epi32(__mm a, int c) { __mm ret = {}; CYCLE { ret.vec_i[i] = a.vec_i[i] << c; } return ret; }; 
 
-void _mm_store(void* dst , __mm a) { int* int_dst = (int*) dst; CYCLE { *int_dst = a.vec_i[i]; int_dst++;}};
+inline void _mm_store(void* dst , __mm a) { int* int_dst = (int*) dst; CYCLE { *int_dst = a.vec_i[i]; int_dst++;}};
 
 #undef CYCLE 
 
@@ -66,33 +66,33 @@ CalculateMandelbrot(core_t core)
     __mm max_dest_v = _mm_set_ps(MAX_DISTANCE);
     __mm one_v = _mm_set_epi32(1);
 
-    for (size_t y_start = 0; y_start < SIZE_Y; y_start++)
+        for (size_t scr_y = 0; scr_y < SIZE_Y; scr_y++)
     {
-        __mm c_y_v = _mm_set_ps(resolution * ((float) CENTER_Y - (float) y_start));
+        __mm c_y_v_0 = _mm_set_ps(resolution * ((float) CENTER_Y - (float) scr_y) + core->center_y);
 
-        for (size_t x_start = 0; x_start < SIZE_X / FLOAT_CAPACITY; x_start++)
+        for (size_t scr_x = 0; scr_x < SIZE_X / FLOAT_CAPACITY; scr_x++)
         {
-            __mm c_x_v = _mm_set_ps(resolution * ((float) x_start * FLOAT_CAPACITY 
-                                            - (float) CENTER_X));
-            c_x_v = _mm_add_ps(c_x_v, step_v);
+            __mm c_x_v_0 = _mm_set_ps(resolution * ((float) scr_x * FLOAT_CAPACITY 
+                                            - (float) CENTER_X) - core->center_x);
+            c_x_v_0 = _mm_add_ps(c_x_v_0, step_v);
             size_t run_number = 0;
             
-            __mm x_cur_v = c_x_v;
-            __mm y_cur_v = c_y_v;
+            __mm c_x_v = c_x_v_0;
+            __mm c_y_v = c_y_v_0;
             __mm run_v = _mm_setzero();
 
             while (run_number < MAX_RUN_NUMBER)
             {
-/*x^2 =*/       __mm x_sqr_v = _mm_mul_ps(x_cur_v, x_cur_v);
-/*y^2 =*/       __mm y_sqr_v = _mm_mul_ps(y_cur_v, y_cur_v);
-/*x*y =*/       __mm x_mul_y_v = _mm_mul_ps(x_cur_v, y_cur_v); 
+/*x^2 =*/       __mm c_x_sqr_v = _mm_mul_ps(c_x_v, c_x_v);
+/*y^2 =*/       __mm c_y_sqr_v = _mm_mul_ps(c_y_v, c_y_v);
+/*x*y =*/       __mm c_x_mul_y_v = _mm_mul_ps(c_y_v, c_x_v); 
 
 // x_next = x_prev * x_prev - y_prev * y_prev + c_x;
-                x_cur_v = _mm_add_ps(_mm_sub_ps(x_sqr_v, y_sqr_v), c_x_v);
+                c_x_v = _mm_add_ps(_mm_sub_ps(c_x_sqr_v, c_y_sqr_v), c_x_v_0);
 // y_next = 2 * x_prev * y_prev + c_y;
-                y_cur_v = _mm_add_ps(_mm_add_ps(x_mul_y_v, x_mul_y_v), c_y_v);
+                c_y_v = _mm_add_ps(_mm_add_ps(c_x_mul_y_v, c_x_mul_y_v), c_y_v_0);
 
-                __mm sqr_sum = _mm_add_ps(x_sqr_v, y_sqr_v);
+                __mm sqr_sum = _mm_add_ps(c_x_sqr_v, c_y_sqr_v);
                 __mm is_greater = _mm_cmp_ps_ge(max_dest_v, sqr_sum);
                 int is_end = _mm_testz_ps(is_greater, is_greater);
                 if (is_end)
@@ -109,7 +109,7 @@ CalculateMandelbrot(core_t core)
             run_v = _mm_slli_epi32(run_v,  24);
             run_v = _mm_or(meow, run_v);
 
-            void* address = (pixels + PIX_LEN * (FLOAT_CAPACITY * x_start + SIZE_X * y_start));
+            void* address = (pixels + PIX_LEN * (FLOAT_CAPACITY * scr_x + SIZE_X * scr_y));
             _mm_store(address , run_v);               
         }
     }

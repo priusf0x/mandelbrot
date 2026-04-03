@@ -5,8 +5,10 @@ SOURCES= \
 		visuals/visuals.cpp\
 		\
 		core/core_compiler.cpp
-		# core/core_avx.cpp
+		# core/core_avx_2.cpp
 		# core/simple_core.cpp
+	
+
 
 INCLUDES_DIR = \
 	       visuals/\
@@ -41,7 +43,7 @@ CFLAGS =  -D _DEBUG -ggdb3 -std=c++17 -O2 -march=native
 # 		               -fsanitize=leak,nonnull-attribute,null,object-size,return,returns-nonnull-attribute,shift,signed-integer-overflow\
 # 		               -fsanitize=undefined,unreachable,vla-bound,vptr
 CFLAGS += $(INCLUDES)
-CFLAGS += -lsfml-graphics -lsfml-window -lsfml-system  -g
+CFLAGS += -lsfml-graphics -lsfml-window -lsfml-system 
 # CFLAGS += -fopt-info-vec-missed
 
 

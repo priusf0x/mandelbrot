@@ -25,6 +25,7 @@ struct visual_s
     double        pr_frame;
     Text*         fps_counter;
     const Font*   font;
+    size_t        frame_counter;
 };
 typedef visual_s* visual_t;
 

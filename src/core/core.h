@@ -9,6 +9,8 @@ struct core_s
 {
     pixel_t* pixels;
     float    resolution;
+    float    center_x;
+    float    center_y;
 };
 typedef core_s* core_t;
 
