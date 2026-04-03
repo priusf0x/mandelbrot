@@ -22,8 +22,10 @@ CalculateMandelbrot(core_t core)
     pixel_t* pixels = core->pixels;
     float resolution = core->resolution;
 
-    __m256 step_v = _mm256_setr_ps(0, resolution, 2 * resolution, 3 * resolution,
-                        4 * resolution, 5 * resolution, 6 * resolution, 7 * resolution);
+    __m256 ladder = {0, 1, 2, 3, 4, 5, 6, 7};
+    __m256 resolution_v = _mm256_set_ps(DUP_8(resolution));
+    __m256 step_v = _mm256_mul_ps(ladder, resolution_v);
+
     __m256 max_dest_v = _mm256_set_ps(DUP_8(MAX_DISTANCE));
     __m256i one_v = _mm256_set_epi32(DUP_8(1));
 
@@ -67,7 +69,7 @@ CalculateMandelbrot(core_t core)
 
             __m256i meow = _mm256_set_epi32(DUP_8(0x00'ff'ff'ff));
             run_v = _mm256_slli_epi32(run_v,  24);
-            run_v = _mm256_or_si256(meow, run_v)    ;
+            run_v = _mm256_or_si256(meow, run_v);
 
             __m256i* address = (__m256i*) (pixels + PIX_LEN * (FLOAT_CAPACITY * x_start 
                                 + SIZE_X * y_start));

@@ -1,7 +1,6 @@
 #include "core.h"
 
 #include <assert.h>
-#include <stdexcept>
 
 #include "visual.h"
 
@@ -18,25 +17,27 @@ CalculateMandelbrot(core_t core)
     pixel_t* pixels = core->pixels;
     float resolution = core->resolution;
 
-    for (size_t y_start = 0; y_start < SIZE_Y; y_start++)
+    // FIXME: norm naming -> sceen coords, comlex_coord
+    for (size_t scr_y = 0; scr_y < SIZE_Y; scr_y++)
     {
-        float c_y = resolution * ((float) CENTER_Y - (float) y_start);
+        float c_y_0 = resolution * ((float) CENTER_Y - (float) scr_y);
 
-        for (size_t x_start = 0; x_start < SIZE_X; x_start++)
+        for (size_t scr_x = 0; scr_x < SIZE_X; scr_x++)
         {
             size_t run_number = 0;
-            float c_x = resolution * ((float) x_start - (float) CENTER_X);
-            float x_next = c_x, y_next = c_y, x_prev = c_x, y_prev = c_y;
+            float c_x_0 = resolution * ((float) scr_x - (float) CENTER_X); /* *отношение сторон */
+            float c_x = c_x_0, c_y = c_y_0;
             
             while (run_number < MAX_RUN_NUMBER)
             {
-                x_next = x_prev * x_prev - y_prev * y_prev + c_x;
-                y_next = 2 * x_prev * y_prev + c_y;
+                float c_x_sqr = c_x * c_x,
+                      c_y_sqr = c_y * c_y,
+                      c_x_y   = c_x * c_y;
 
-                x_prev = x_next;
-                y_prev = y_next;
+                c_x = c_x_sqr - c_y_sqr + c_x_0;
+                c_y = 2 * c_x_y + c_y_0;
 
-                if (x_next * x_next + y_next * y_next > MAX_DISTANCE * MAX_DISTANCE)
+                if (c_x_sqr + c_y_sqr > MAX_DISTANCE * MAX_DISTANCE)
                 {
                     break; 
                 }   
@@ -44,10 +45,10 @@ CalculateMandelbrot(core_t core)
                 run_number++;
             }
                                                             
-            pixels[PIX_LEN * x_start + 0 + PIX_LEN * SIZE_X * y_start] = 255;                        
-            pixels[PIX_LEN * x_start + 1 + PIX_LEN * SIZE_Y * y_start] = 255;                        
-            pixels[PIX_LEN * x_start + 2 + PIX_LEN * SIZE_Y * y_start] = 255;                        
-            pixels[PIX_LEN * x_start + 3 + PIX_LEN * SIZE_Y * y_start] = (pixel_t) run_number;                        
+            pixels[PIX_LEN * scr_x + 0 + PIX_LEN * SIZE_X * scr_y] = 255;                        
+            pixels[PIX_LEN * scr_x + 1 + PIX_LEN * SIZE_Y * scr_y] = 255;                        
+            pixels[PIX_LEN * scr_x + 2 + PIX_LEN * SIZE_Y * scr_y] = 255;                        
+            pixels[PIX_LEN * scr_x + 3 + PIX_LEN * SIZE_Y * scr_y] = (pixel_t) run_number;                        
         }
     }
 }

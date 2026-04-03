@@ -24,7 +24,6 @@ VisualCtor(visual_t* context)
     assert(context != nullptr);
 
     *context = (visual_t) calloc(1, sizeof(visual_s));
-
     if (*context == nullptr)
     {
         return VISUAL_RETURN_BAD_ALLOC;
@@ -33,7 +32,6 @@ VisualCtor(visual_t* context)
     visual_t visual = *context;
 
     visual->pixels = (pixel_t*) calloc(PIXELS_SIZE, sizeof(pixel_t));  
-
     if (visual->pixels == nullptr)
     {
         free(*context);

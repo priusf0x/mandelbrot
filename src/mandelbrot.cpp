@@ -5,8 +5,6 @@
 #include "visual.h"
 #include "core.h"
 
-using namespace std;
-
 //////////////////////////////// Main Cycle ///////////////////////////////////
 
 void
@@ -17,7 +15,7 @@ ShowMandelbrot(visual_t visual,
 
     while (visual->window->isOpen())
     {
-        while (const optional event = visual->window->pollEvent())
+        while (const std::optional<sf::Event> event = visual->window->pollEvent())
         {
             if (event->is<Event::Closed>())
                 visual->window->close();
