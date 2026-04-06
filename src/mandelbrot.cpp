@@ -9,7 +9,7 @@
 //////////////////////////////// Main Cycle ///////////////////////////////////
 
 static const float COORD_INCREMENT = 10;
-static const float RES_INCREMENT = 1.10;
+static const float RES_INCREMENT = 1.10f;
 
 void
 ShowMandelbrot(visual_t visual,
@@ -61,11 +61,8 @@ ShowMandelbrot(visual_t visual,
         }
         
         visual->window->clear();
-
         ShowFPS(visual);
-
         CalculateMandelbrot(core);
-
         UpdateScreen(visual);
     }
 }

@@ -1,19 +1,27 @@
-#include "visual.h"
 #include "mandelbrot.h"
 
+#include "visual.h"
+#include "core.h"
+
 #include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
+#ifdef GPU
+// #include <CL/cl.h>
+#endif // GPU
 
 int main()
 {
     visual_t visual = nullptr;
+    core_s core = {}; 
     VisualCtor(&visual);
-
-    core_s core = {.pixels = visual->pixels, .resolution = 1.0/300};
-    core_t context = &core;
-
-    ShowMandelbrot(visual, context);
+    CoreCtor(&core, visual->pixels); 
+    
+    ShowMandelbrot(visual, &core);
 
     VisualDtor(&visual);
+    CoreDtor(&core);
 
     return 0;
 }

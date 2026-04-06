@@ -105,9 +105,9 @@ CalculateMandelbrot(core_t core)
                 run_number++;
             }
 
-            __mm meow = _mm_set_epi32(0x00'ff'ff'ff);
+            __mm color_mask = _mm_set_epi32(0x00'ff'ff'ff);
             run_v = _mm_slli_epi32(run_v,  24);
-            run_v = _mm_or(meow, run_v);
+            run_v = _mm_or(color_mask, run_v);
 
             void* address = (pixels + PIX_LEN * (FLOAT_CAPACITY * scr_x + SIZE_X * scr_y));
             _mm_store(address , run_v);               

@@ -16,16 +16,15 @@ CalculateMandelbrot(core_t core)
 
     pixel_t* pixels = core->pixels;
     float resolution = core->resolution;
-    float cam_x = core->center_x, cam_y = core->center_y;
 
     for (size_t scr_y = 0; scr_y < SIZE_Y; scr_y++)
     {
-        float c_y_0 = resolution * ((float) CENTER_Y - (float) scr_y) + cam_y;
+        float c_y_0 = resolution * ((float) CENTER_Y - (float) scr_y) + core->center_y;
 
         for (size_t scr_x = 0; scr_x < SIZE_X; scr_x++)
         {
             size_t run_number = 0;
-            float c_x_0 = resolution * ((float) scr_x - (float) CENTER_X) - cam_x; 
+            float c_x_0 = resolution * ((float) scr_x - (float) CENTER_X) - core->center_y; 
             float c_x = c_x_0, c_y = c_y_0;
             
             while (run_number < MAX_RUN_NUMBER)

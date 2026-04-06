@@ -96,7 +96,7 @@ ShowFPS(visual_t context)
 {
     assert(context != nullptr);
 
-    const size_t frame_upd = 10;
+    const size_t frame_upd = 100;
     context->window->draw(*context->fps_counter);
 
     if (context->frame_counter < frame_upd)
