@@ -9,9 +9,9 @@ SOURCES= \
 		\
 		core/core.cpp\
 		\
-		core/core_avx_3.cpp
+		core/openCL/core_gpu.cpp
+		# core/core_avx_3.cpp
 		# core/core_compiler.cpp
-		# core/openCL/core_gpu.cpp
 		# core/simple_core.cpp
 	
 
@@ -33,7 +33,7 @@ TARGET = mandelbrot.out
 
 # c++/c compiler options
 CC = g++
-CFLAGS =  -D _DEBUG -ggdb3 -std=c++17 -O2 -march=native 
+CFLAGS =  -D NDEBUG -std=c++17 -O3 -march=native -D GPU
 CFLAGS += $(INCLUDES)
 CFLAGS += -lsfml-graphics -lsfml-window -lsfml-system -lOpenCL 
 # CFLAGS += -fopt-info-vec-missed

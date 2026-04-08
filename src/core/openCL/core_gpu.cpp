@@ -7,7 +7,7 @@
 #include <CL/cl.h>
 
 const size_t LOCAL_SIZE_X = 256;
-const size_t LOCAL_SIZE_Y = 4;
+const size_t LOCAL_SIZE_Y = 1;
 
 void 
 CalculateMandelbrot(core_t core)
@@ -26,8 +26,8 @@ CalculateMandelbrot(core_t core)
     clEnqueueNDRangeKernel(core->queue, core->kernel, 2, nullptr, 
                             global_size, local_size, 0, nullptr, nullptr);
 
-    clEnqueueReadBuffer(core->queue, core->gpu_buffer, CL_TRUE, 0, 
-                            PIXELS_SIZE, core->pixels, 0, nullptr, nullptr);
+    // clEnqueueReadBuffer(core->queue, core->gpu_buffer, CL_TRUE, 0, 
+    //                         PIXELS_SIZE, core->pixels, 0, nullptr, nullptr);
 
     clFinish(core->queue);
 }

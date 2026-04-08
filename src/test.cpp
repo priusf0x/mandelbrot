@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 volatile pixel_t VISUAL[PIXELS_SIZE] = {};
-static const size_t NUM_OF_MEASURES = 1000;
+static const size_t NUM_OF_MEASURES = 10000;
 
 static inline uint64_t rdtsc()
 {
