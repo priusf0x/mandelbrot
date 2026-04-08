@@ -1,6 +1,7 @@
-Mandelbrot
+<h1 align="left">Mandelbrot</h1>
 
 ###
+
 
 | Метод | O0 | O1 | O2 | O3 | -OFAST |
 | :--- | :--- | :--- | :--- | :--- | :--- |
